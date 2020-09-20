@@ -15,6 +15,13 @@ define("SERVER_NOTIF", serialize([
 	'TrackSID'
 ]));
 
+define("JENIS_PELANGGAN", serialize([
+	1 => 'hosting saja',
+	2 => 'update saja',
+	3 => 'hosting dan update',
+	4 => 'premium'
+]));
+
 class Referensi_model extends CI_Model {
 
 	public function __construct()
