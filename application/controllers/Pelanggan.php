@@ -22,12 +22,18 @@ class Pelanggan extends Admin_Controller{
 	/*
 	 * Listing of pelanggan
 	 */
-	function index()
+
+	public function clear()
+	{
+		$this->session->filter = null;
+		redirect('pelanggan/index');
+	}
+
+	public function index()
 	{
 		$params['limit'] = 20; // jumlah records per halaman
 		$params['offset'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
-		$filter = $this->input->post('jenis');
+		$filter = $this->input->post('filter');
 		if (isset($filter))
 		{
 			$this->session->filter = $filter;
@@ -39,7 +45,8 @@ class Pelanggan extends Admin_Controller{
 
 		$data['pelanggan'] = $this->pelanggan_model->get_all_pelanggan($params);
 
-		$data['combo_jenis'] =  $this->pelanggan_model->get_all_jenis();
+		$data['jenis_pelanggan'] =  $this->referensi_model->list_ref(JENIS_PELANGGAN);
+		$data['status_langganan'] = $this->referensi_model->list_ref(STATUS_LANGGANAN);
 		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);
 		$data['selected_filter'] = $filter;
 
@@ -72,11 +79,10 @@ class Pelanggan extends Admin_Controller{
       $row[] = $pelanggan['desa'];
       $row[] = $pelanggan['nama'];
       $row[] = $pelanggan['no_hp'];
-      $row[] = $pelanggan['jenis_langganan'];
-      $row[] = $pelanggan['tgl_akhir'];
-      $row[] = $pelanggan['iuran_terakhir'];
-      $row[] = $pelanggan['status_langganan'];
-      $row[] = $pelanggan['pelaksana'];
+      $row[] = ucwords($this->referensi_model->list_ref(JENIS_PELANGGAN)[$pelanggan['jenis_langganan']]);
+      $row[] = tgl_out($pelanggan['tgl_akhir']);
+      $row[] = ucwords($this->referensi_model->list_ref(STATUS_LANGGANAN)[$pelanggan['status_langganan']]);
+      $row[] = $this->referensi_model->list_ref(PELAKSANA)[$pelanggan['pelaksana']];
 
       $data[] = $row;
     }
@@ -105,6 +111,12 @@ class Pelanggan extends Admin_Controller{
 			$data['pelanggan'] = $this->pelanggan_model->get_pelanggan($id);
 			if (empty($data['pelanggan']))
 				show_error('Pelanggan itu tidak ditemukan.');
+			else
+				$data['desa'] = $this->db->where('id', $data['pelanggan']['id_desa'])->get('desa')->row_array();
+		}
+		else
+		{
+			$data['desa'] = ($id_desa = $this->input->post('id_desa')) ? $this->db->where('id', $id_desa)->get('desa')->row_array() : null;
 		}
 
 		$this->load->library('form_validation');
@@ -115,8 +127,9 @@ class Pelanggan extends Admin_Controller{
 		$this->form_validation->set_rules('no_hp','No. HP','required|numeric');
 		$this->form_validation->set_rules('email','Email','valid_email');
 		$this->form_validation->set_rules('jenis_langganan','Jenis Langganan','required|integer');
-		$this->form_validation->set_rules('tgl_iuran','Tgl Iuran','required');
-		$this->form_validation->set_rules('iuran_terakhir','Jumlah Iuran','required|numeric');
+		$this->form_validation->set_rules('tgl_mulai','Tgl Mulai','required');
+		$this->form_validation->set_rules('tgl_akhir','Tgl Akhir','required');
+		$this->form_validation->set_rules('status_langganan','Status Langganan','numeric');
 		$this->form_validation->set_rules('pelaksana','Pelaksana','required|alpha_numeric_spaces');
 
 		if ($this->form_validation->run())
@@ -124,24 +137,27 @@ class Pelanggan extends Admin_Controller{
 			$params = array(
 				'domain' => $this->input->post('domain'),
 				'id_desa' => $this->input->post('id_desa'),
-				'nama' => htmlentities($this->input->post('nama')),
+				'nama' => $this->input->post('nama'),
 				'no_hp' => $this->input->post('no_hp'),
+				'email' => $this->input->post('email'),
 				'jenis_langganan' => $this->input->post('jenis_langganan'),
-				'tgl_iuran' => $this->input->post('tgl_iuran'),
-				'iuran_terakhir' => htmlentities($this->input->post('iuran_terakhir')),
-				'pelaksana' => htmlentities($this->input->post('pelaksana')),
+				'tgl_mulai' => tgl_in($this->input->post('tgl_mulai')),
+				'tgl_akhir' => tgl_in($this->input->post('tgl_akhir')),
+				'status_langganan' => $this->input->post('status_langganan'),
+				'pelaksana' => $this->input->post('pelaksana')
 			);
-
 			if ($id)
 				$this->pelanggan_model->update_pelanggan($id, $params);
 			else
+			{
 				$this->pelanggan_model->add_pelanggan($params);
+			}
 			redirect('pelanggan/index');
 		}
-
 		$data['status_aktif'] = $this->referensi_model->list_ref(STATUS_AKTIF);
 		$data['jenis_pelanggan'] = $this->referensi_model->list_ref(JENIS_PELANGGAN);
 		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);
+		$data['status_langganan'] = $this->referensi_model->list_ref(STATUS_LANGGANAN);
 		$this->load->view('dashboard/header');
 		$this->load->view('dashboard/nav');
 		$this->load->view('pelanggan/form', $data);
@@ -164,18 +180,18 @@ class Pelanggan extends Admin_Controller{
 	/*
 	 * Deleting pelanggan
 	 */
-	function remove($id)
+	public function remove($id)
 	{
-		$pelanggan = $this->Notif_model->get_pelanggan($id);
+		$pelanggan = $this->pelanggan_model->get_pelanggan($id);
 
 		// check if the pelanggan exists before trying to delete it
 		if (isset($pelanggan['id']))
 		{
-			$this->Notif_model->delete_pelanggan($id);
+			$this->pelanggan_model->delete_pelanggan($id);
 			redirect('pelanggan/index');
 		}
 		else
-			show_error('The pelanggan you are trying to delete does not exist.');
+			show_error('Pelanggan tersebut tidak ditemukan.');
 	}
 
 	public function lock($id = 0, $aktif = 0)

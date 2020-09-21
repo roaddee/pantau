@@ -20,10 +20,22 @@
 			<div class="box-body">
 				<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 					<form id="mainform" name="mainform" action="<?=site_url("pelanggan/index")?>" method="post">
-						<select class="form-control input-sm " name="jenis" onchange="$('#mainform').submit();">
+						<select class="form-control input-sm" name="filter[jenis]" onchange="$('#mainform').submit();">
 							<option value="">Pilih Jenis</option>
-							<?php foreach ($combo_jenis as $combo): ?>
-								<option value="<?= $combo['jenis'] ?>" <?php $combo['jenis'] == $selected_filter and print('selected') ?>><?= ucwords($combo['jenis']) ?></option>
+							<?php foreach ($jenis_pelanggan as $key => $jenis): ?>
+								<option value="<?= $key ?>" <?php $selected_filter && $key == $selected_filter['jenis'] && print('selected') ?>><?= ucwords($jenis) ?></option>
+							<?php endforeach ?>
+						</select>
+						<select class="form-control input-sm" name="filter[status]" onchange="$('#mainform').submit();">
+							<option value="">Pilih Status</option>
+							<?php foreach ($status_langganan as $key => $status): ?>
+								<option value="<?= $key ?>" <?php $selected_filter && $key == $selected_filter['status'] && print('selected') ?>><?= ucwords($status) ?></option>
+							<?php endforeach ?>
+						</select>
+						<select class="form-control input-sm" name="filter[pelaksana]" onchange="$('#mainform').submit();">
+							<option value="">Pilih Pelaksana</option>
+							<?php foreach ($pelaksana as $key => $nama): ?>
+								<option value="<?= $key ?>" <?php $selected_filter && $key == $selected_filter['pelaksana'] && print('selected') ?>><?= ucwords($nama) ?></option>
 							<?php endforeach ?>
 						</select>
 					</form>
@@ -39,7 +51,6 @@
 									<th>No. HP</th>
 									<th>Jenis Langganan</th>
 									<th>Tgl Akhir</th>
-									<th>Iuran Terakhir</th>
 									<th>Status Langganan</th>
 									<th>Pelaksana</th>
 								</tr>
@@ -76,7 +87,7 @@
 			//Set column definition initialisation properties.
 			"columnDefs": [
 				{
-					"targets": [ 0, 1, 5, 8 ], //first column / numbering column
+					"targets": [ 0, 1, 5 ], //first column / numbering column
 					"orderable": false, //set not orderable
 				},
         {

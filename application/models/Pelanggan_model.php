@@ -4,7 +4,7 @@ class Pelanggan_model extends CI_Model {
 
 	// Untuk datatables
 	var $table = 'pelanggan';
-	var $column_order = array(null, null, 'domain', 'desa', 'nama', null, 'jenis_langganan', 'tgl_akhir', null, 'status_langganan', 'pelaksana'); //set column field database for datatable orderable
+	var $column_order = array(null, null, 'domain', 'desa', 'nama', null, 'jenis_langganan', 'tgl_akhir', 'status_langganan', 'pelaksana'); //set column field database for datatable orderable
 	var $column_search = array('domain', 'nama'); //set column field database for datatable searchable
 	var $order = array('domain' => 'asc'); // default order
 
@@ -78,11 +78,11 @@ class Pelanggan_model extends CI_Model {
 	}
 
 	/*
-	 * Get notifikasi by id
+	 * Get pelanggan by id
 	 */
-	function get_notifikasi($id)
+	public function get_pelanggan($id)
 	{
-		return $this->db->get_where('notifikasi',array('id' => $id))->row_array();
+		return $this->db->get_where('pelanggan', array('id' => $id))->row_array();
 	}
 
 	// Setting order_by untuk datatables
@@ -126,10 +126,10 @@ class Pelanggan_model extends CI_Model {
 
 	private function set_filter()
 	{
-		if ($filter = $this->session->filter)
-		{
-			$this->db->where('jenis_pelanggan', $filter);
-		}
+		if (empty($filter = $this->session->filter)) return;
+		if (! empty($filter['jenis'])) $this->db->where('jenis_langganan', $filter['jenis']);
+		if (! empty($filter['pelaksana'])) $this->db->where('pelaksana', $filter['pelaksana']);
+		if (! empty($filter['status'])) $this->db->where('status_langganan', $filter['status']);
 	}
 
 	public function get_all_pelanggan($params = array())
@@ -142,12 +142,17 @@ class Pelanggan_model extends CI_Model {
 		{
 			$this->db->limit($params['limit'], $params['offset']);
 		}
-		$data = $this->db->get('pelanggan')->result_array();
+		$data = $this->db
+			->select('p.*')
+			->select('CONCAT("Desa ", d.nama_desa, ", ", " Kec ", d.nama_kecamatan, ", ", " Kab ", d.nama_kabupaten, ", ", " Prov ", d.nama_provinsi) as desa')
+			->from('pelanggan p')
+			->join('desa d', 'p.id_desa = d.id')
+			->get()->result_array();
 
 		return $data;
 	}
 
-	function get_all_pelanggan_count()
+	public function get_all_pelanggan_count()
 	{
 		$this->db->select('*');
 		$this->db->from('pelanggan');
@@ -155,7 +160,7 @@ class Pelanggan_model extends CI_Model {
 		return $count;
 	}
 
-	function get_all_jenis()
+	public function get_all_jenis()
 	{
 		return $this->db->select('jenis_langganan')->distinct()->get('pelanggan')->result_array();
 	}
@@ -163,27 +168,27 @@ class Pelanggan_model extends CI_Model {
 	/*
 	 * Tambah pelanggan baru
 	 */
-	function add_pelanggan($params)
+	public function add_pelanggan($params)
 	{
 		$this->db->insert('pelanggan', $params);
 		return $this->db->insert_id();
 	}
 
 	/*
-	 * function to update notifikasi
+	 * Update pelanggan
 	 */
-	function update_notifikasi($id,$params)
+	public function update_pelanggan($id, $params)
 	{
 		$this->db->where('id', $id);
-		return $this->db->update('notifikasi', $params);
+		return $this->db->update('pelanggan', $params);
 	}
 
 	/*
-	 * function to delete notifikasi
+	 * Delete pelanggan
 	 */
-	function delete_notifikasi($id)
+	public function delete_pelanggan($id)
 	{
-		return $this->db->delete('notifikasi', array('id'=>$id));
+		return $this->db->delete('pelanggan', array('id'=>$id));
 	}
 
 	public function lock($id=0, $aktif=0)

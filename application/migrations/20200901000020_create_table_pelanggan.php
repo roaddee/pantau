@@ -26,7 +26,7 @@ class Migration_Create_table_pelanggan extends CI_Migration {
 				`domain` VARCHAR(100),
 				`jenis_langganan` TINYINT(4) NOT NULL DEFAULT 1,
 				`status_langganan` TINYINT(4) NOT NULL DEFAULT 1,
-				`pelaksana` VARCHAR(100) NOT NULL,
+				`pelaksana` VARCHAR(100) NULL,
 				PRIMARY KEY (`id`)
 			)";
 			$this->db->query($query);

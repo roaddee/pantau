@@ -16,17 +16,22 @@ define("SERVER_NOTIF", serialize([
 ]));
 
 define("JENIS_PELANGGAN", serialize([
-	1 => 'hosting saja',
-	2 => 'update saja',
-	3 => 'hosting dan update',
-	4 => 'premium'
+	1 => 'hosting dan update',
+	2 => 'hosting saja',
+	3 => 'premium',
+	4 => 'update saja',
+]));
+
+define("STATUS_LANGGANAN", serialize([
+	1 => 'aktif',
+	2 => 'suspended',
+	3 => 'tidak aktif'
 ]));
 
 define("PELAKSANA", serialize([
 	1 => 'Herry Wanda',
-	2 => 'Rudy Purwanto',
-	3 => 'Mohammad Ihsan',
-	99 => '- Tidak Perlu -'
+	2 => 'Mohammad Ihsan',
+	3 => 'Rudy Purwanto'
 ]));
 
 class Referensi_model extends CI_Model {

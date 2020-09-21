@@ -34,7 +34,11 @@
 					<div class="form-group">
 						<label for="id_desa" class="col-md-2 control-label"><span class="text-danger">*</span>Desa</label>
 						<div class="col-md-5">
-							<input type="text" name="id_desa" value="<?= $this->input->post('id_desa') ?: $pelanggan['id_desa'] ?>" class="form-control" placeholder="Desa pelanggan" />
+					  	<select class="form-control required input-sm select2-desa-ajax" name="id_desa" style ="width:100%;" data-url="<?= site_url('desa/list_desa_ajax')?>" onchange="formAction('validasi')">
+								<?php if ($desa): ?>
+									<option value="<?= $desa['id']?>" selected><?= $desa['nama_desa'].' - '.$desa['nama_kabupaten']?></option>
+								<?php endif;?>
+							</select>
 							<span class="text-danger"><?= form_error('id_desa');?></span>
 						</div>
 					</div>
@@ -72,37 +76,45 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="tgl_mulai" class="col-md-2 control-label"><span class="text-danger">*</span>Tgl Mulai Langganan</label>
+						<div class="col-md-5">
+							<div class="input-group input-group-sm date">
+								<div class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</div>
+								<input title="Tanggal Mulai" class="form-control input-sm required tgl_mulai" name="tgl_mulai" type="text"/>
+							</div>
+							<span class="text-danger"><?= form_error('tgl_mulai');?></span>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="tgl_akhir" class="col-md-2 control-label"><span class="text-danger">*</span>Tgl Berakhirnya Langganan</label>
 						<div class="col-md-5">
-
-
-									<div class="input-group input-group-sm date">
-										<div class="input-group-addon">
-											<i class="fa fa-calendar"></i>
-										</div>
-										<input title="Tanggal Akhir" class="form-control input-sm required tgl_akhir" name="tgl_akhir" type="text"/>
-									</div>
+							<div class="input-group input-group-sm date">
+								<div class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</div>
+								<input title="Tanggal Akhir" class="form-control input-sm required tgl_akhir" name="tgl_akhir" type="text"/>
+							</div>
 							<span class="text-danger"><?= form_error('tgl_akhir');?></span>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="iuran_terakhir" class="col-md-2 control-label"><span class="text-danger">*</span>Iuran Terakhir</label>
-						<div class="col-md-5">
-							<input name="iuran_terakhir" class="form-control" placeholder="Jumlah pembayaran terakhir" value="<?= $this->input->post('iuran_terakhir') ?: $pelanggan['iuran_terakhir'] ?>">
-							<span class="text-danger"><?= form_error('iuran_terakhir');?></span>
-						</div>
-					</div>
-					<div class="form-group">
 						<label for="status_langganan" class="col-md-2 control-label">Status Langganan</label>
-						<div class="col-md-5">
-							<input name="status_langganan" class="form-control" placeholder="Status langganan" value="<?= $this->input->post('status_langganan') ?: $pelanggan['status_langganan'] ?>">
+						<div class="col-md-3">
+							<select name="status_langganan" class="form-control">
+								<option value="">Pilih Status Langganan</option>
+								<?php foreach ($status_langganan as $key => $nama): ?>
+									<option value="<?= $key ?>" <?= selected($key, $this->input->post('status_langganan') ?: $pelanggan['status_langganan']) ?>><?= ucwords($nama) ?></option>
+								<?php endforeach; ?>
+							</select>
 							<span class="text-danger"><?= form_error('status_langganan');?></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="pelaksana" class="col-md-2 control-label"><span class="text-danger">*</span>Pelaksana</label>
 						<div class="col-md-3">
-							<select name="aktif" class="form-control">
+							<select name="pelaksana" class="form-control">
 								<option value="">Pilih Pelaksana</option>
 								<?php foreach ($pelaksana as $key => $nama): ?>
 									<option value="<?= $key ?>" <?= selected($key, $this->input->post('pelaksana') ?: $pelanggan['pelaksana']) ?>><?= $nama ?></option>

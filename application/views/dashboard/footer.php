@@ -17,6 +17,8 @@
     <script src="<?= base_url('assets/datatables/js/jquery.dataTables.min.js')?>"></script>
 		<script src="<?= base_url('assets/bootstrap/js/moment.min.js')?>"></script>
     <script src="<?= base_url('assets/datatables/js/dataTables.bootstrap.min.js')?>"></script>
+		<!-- Select2 -->
+		<script src="<?= base_url()?>assets/bootstrap/js/select2.full.min.js"></script>
 		<!-- bootstrap Date time picker -->
 		<script src="<?= base_url('assets/bootstrap/js/bootstrap-datetimepicker.min.js')?>"></script>
 		<script src="<?= base_url('assets/bootstrap/js/id.js')?>"></script>
