@@ -25,82 +25,90 @@
 				<input type="hidden" name='id' value="<?= $pelanggan['id']?>">
 				<div class="box-body">
 					<div class="form-group">
-						<label for="aktif" class="col-md-2 control-label"><span class="text-danger">*</span>Aktif</label>
+						<label for="domain" class="col-md-2 control-label"><span class="text-danger">*</span>Domain</label>
+						<div class="col-md-5">
+							<input type="text" name="domain" class="form-control" placeholder="Contoh: cigelam.desa.id" value="<?= $this->input->post('domain') ?: $pelanggan['domain']?>"/>
+							<span class="text-danger"><?= form_error('domain');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="id_desa" class="col-md-2 control-label"><span class="text-danger">*</span>Desa</label>
+						<div class="col-md-5">
+							<input type="text" name="id_desa" value="<?= $this->input->post('id_desa') ?: $pelanggan['id_desa'] ?>" class="form-control" placeholder="Desa pelanggan" />
+							<span class="text-danger"><?= form_error('id_desa');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="nama" class="col-md-2 control-label"><span class="text-danger">*</span>Nama Kontak</label>
+						<div class="col-md-5">
+							<input type="text" name="nama" value="<?= $this->input->post('nama') ?: $pelanggan['nama'] ?>" class="form-control" placeholder="Nama kontak pengelola dari desa"/>
+							<span class="text-danger"><?= form_error('nama');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="no_hp" class="col-md-2 control-label"><span class="text-danger">*</span>No. HP</label>
+						<div class="col-md-5">
+							<input type="text" name="no_hp" value="<?= $this->input->post('no_hp') ?: $pelanggan['no_hp'] ?>" class="form-control" placeholder="Nomor HP kontak desa"/>
+							<span class="text-danger"><?= form_error('no_hp');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="email" class="col-md-2 control-label">Email</label>
+						<div class="col-md-5">
+							<input type="text" name="email" value="<?= $this->input->post('email') ?: $pelanggan['email'] ?>" class="form-control" placeholder="Alamat email kontak desa"/>
+							<span class="text-danger"><?= form_error('email');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="jenis_langganan" class="col-md-2 control-label"><span class="text-danger">*</span>Jenis Langganan</label>
+						<div class="col-md-3">
+							<select name="jenis_langganan" class="form-control">
+								<option value="">Pilih Jenis Langganan</option>
+								<?php foreach ($jenis_pelanggan as $kode => $jenis): ?>
+									<option value="<?= $kode ?>" <?= selected($kode, $this->input->post('jenis_langganan') ?: $pelanggan['jenis_langganan']) ?>><?= ucwords($jenis) ?></option>
+								<?php endforeach; ?>
+							</select>
+							<span class="text-danger"><?= form_error('jenis_langganan');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="tgl_akhir" class="col-md-2 control-label"><span class="text-danger">*</span>Tgl Berakhirnya Langganan</label>
+						<div class="col-md-5">
+
+
+									<div class="input-group input-group-sm date">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+										<input title="Tanggal Akhir" class="form-control input-sm required tgl_akhir" name="tgl_akhir" type="text"/>
+									</div>
+							<span class="text-danger"><?= form_error('tgl_akhir');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="iuran_terakhir" class="col-md-2 control-label"><span class="text-danger">*</span>Iuran Terakhir</label>
+						<div class="col-md-5">
+							<input name="iuran_terakhir" class="form-control" placeholder="Jumlah pembayaran terakhir" value="<?= $this->input->post('iuran_terakhir') ?: $pelanggan['iuran_terakhir'] ?>">
+							<span class="text-danger"><?= form_error('iuran_terakhir');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="status_langganan" class="col-md-2 control-label">Status Langganan</label>
+						<div class="col-md-5">
+							<input name="status_langganan" class="form-control" placeholder="Status langganan" value="<?= $this->input->post('status_langganan') ?: $pelanggan['status_langganan'] ?>">
+							<span class="text-danger"><?= form_error('status_langganan');?></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="pelaksana" class="col-md-2 control-label"><span class="text-danger">*</span>Pelaksana</label>
 						<div class="col-md-3">
 							<select name="aktif" class="form-control">
-								<option value="">Pilih Status Aktif</option>
-								<?php foreach ($status_aktif as $key => $nama): ?>
-									<option value="<?= $key ?>" <?= selected($key, $this->input->post('aktif') ?: $pelanggan['aktif']) ?>><?= $nama ?></option>
+								<option value="">Pilih Pelaksana</option>
+								<?php foreach ($pelaksana as $key => $nama): ?>
+									<option value="<?= $key ?>" <?= selected($key, $this->input->post('pelaksana') ?: $pelanggan['pelaksana']) ?>><?= $nama ?></option>
 								<?php endforeach; ?>
 							</select>
-							<span class="text-danger"><?= form_error('aktif');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="frekuensi" class="col-md-2 control-label"><span class="text-danger">*</span>Frekuensi</label>
-						<div class="col-md-3">
-							<input type="text" name="frekuensi" class="form-control" placeholder="Contoh: setiap 30, 60, 90 hari" value="<?= $this->input->post('frekuensi') ?: $pelanggan['frekuensi']?>"/>
-							<span class="text-danger"><?= form_error('frekuensi');?></span>
-						</div>
-						<span class="col-md-1 teks-form"> hari </span>
-					</div>
-					<div class="form-group">
-						<label for="kode" class="col-md-2 control-label"><span class="text-danger">*</span>Kode</label>
-						<div class="col-md-3">
-							<input type="text" name="kode" value="<?= $this->input->post('kode') ?: $pelanggan['kode'] ?>" class="form-control" placeholder="Kode unik untuk pelanggan" />
-							<span class="text-danger"><?= form_error('kode');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="judul" class="col-md-2 control-label"><span class="text-danger">*</span>Judul</label>
-						<div class="col-md-8">
-							<input type="text" name="judul" value="<?= $this->input->post('judul') ?: $pelanggan['judul'] ?>" class="form-control" placeholder="Judul yang ditampilkan di popup pengumuman"/>
-							<span class="text-danger"><?= form_error('judul');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="jenis" class="col-md-2 control-label"><span class="text-danger">*</span>Jenis</label>
-						<div class="col-md-3">
-							<select name="jenis" class="form-control">
-								<option value="">Pilih Jenis Pelanggan</option>
-								<?php foreach ($jenis_notif as $nama): ?>
-									<option value="<?= $nama ?>" <?= selected($nama, $this->input->post('jenis') ?: $pelanggan['jenis']) ?>><?= ucwords($nama) ?></option>
-								<?php endforeach; ?>
-							</select>
-							<span class="text-danger"><?= form_error('jenis');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="server" class="col-md-2 control-label"><span class="text-danger">*</span>Server</label>
-						<div class="col-md-3">
-							<select name="server" class="form-control">
-								<option value="">Pilih Server Pelanggan</option>
-								<?php foreach ($server_notif as $nama): ?>
-									<option value="<?= $nama ?>" <?= selected($nama, $this->input->post('server') ?: $pelanggan['server']) ?>><?= $nama ?></option>
-								<?php endforeach; ?>
-							</select>
-							<span class="text-danger"><?= form_error('server');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="isi" class="col-md-2 control-label"><span class="text-danger">*</span>Isi</label>
-						<div class="col-md-8">
-							<textarea name="isi" class="form-control" placeholder="Teks pengumuman"><?= $this->input->post('isi') ?: $pelanggan['isi'] ?></textarea>
-							<span class="text-danger"><?= form_error('isi');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="aksi_ya" class="col-md-2 control-label">Aksi Tombol Ya</label>
-						<div class="col-md-8">
-							<input name="aksi_ya" class="form-control" placeholder="Aksi OpenSID apabila peringatan disetujui" value="<?= $this->input->post('aksi_ya') ?: $pelanggan['aksi_ya'] ?>">
-							<span class="text-danger"><?= form_error('aksi_ya');?></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="aksi_tidak" class="col-md-2 control-label">Aksi Tombol Tidak</label>
-						<div class="col-md-8">
-							<input name="aksi_tidak" class="form-control" placeholder="Aksi OpenSID apabila peringatan tidak disetujui" value="<?= $this->input->post('aksi_tidak') ?: $pelanggan['aksi_tidak'] ?>">
-							<span class="text-danger"><?= form_error('aksi_tidak');?></span>
+							<span class="text-danger"><?= form_error('pelaksana');?></span>
 						</div>
 					</div>
 				</div>

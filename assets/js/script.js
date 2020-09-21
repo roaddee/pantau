@@ -14,4 +14,11 @@ $(document).ready(function()
 		$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	});
 
+	$('.tgl_akhir').datetimepicker({
+		locale:'id',
+		format: 'DD-MM-YYYY',
+		useCurrent: false,
+		date: moment(new Date()).add(1, 'Y')
+	});
+
 });

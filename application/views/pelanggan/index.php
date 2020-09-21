@@ -35,12 +35,13 @@
 									<th>Aksi</th>
 									<th>Domain</th>
 									<th>Desa</th>
-									<th>Nama</th>
+									<th>Kontak</th>
 									<th>No. HP</th>
 									<th>Jenis Langganan</th>
 									<th>Tgl Akhir</th>
 									<th>Iuran Terakhir</th>
 									<th>Status Langganan</th>
+									<th>Pelaksana</th>
 								</tr>
 							</thead>
 							<tbody>

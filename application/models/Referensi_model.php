@@ -22,6 +22,13 @@ define("JENIS_PELANGGAN", serialize([
 	4 => 'premium'
 ]));
 
+define("PELAKSANA", serialize([
+	1 => 'Herry Wanda',
+	2 => 'Rudy Purwanto',
+	3 => 'Mohammad Ihsan',
+	99 => '- Tidak Perlu -'
+]));
+
 class Referensi_model extends CI_Model {
 
 	public function __construct()

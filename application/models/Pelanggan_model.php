@@ -4,7 +4,7 @@ class Pelanggan_model extends CI_Model {
 
 	// Untuk datatables
 	var $table = 'pelanggan';
-	var $column_order = array(null, null, 'domain', 'desa', 'nama', null, 'jenis_langganan', 'tgl_akhir', null, 'status_langganan'); //set column field database for datatable orderable
+	var $column_order = array(null, null, 'domain', 'desa', 'nama', null, 'jenis_langganan', 'tgl_akhir', null, 'status_langganan', 'pelaksana'); //set column field database for datatable orderable
 	var $column_search = array('domain', 'nama'); //set column field database for datatable searchable
 	var $order = array('domain' => 'asc'); // default order
 
@@ -161,11 +161,11 @@ class Pelanggan_model extends CI_Model {
 	}
 
 	/*
-	 * function to add new notifikasi
+	 * Tambah pelanggan baru
 	 */
-	function add_notifikasi($params)
+	function add_pelanggan($params)
 	{
-		$this->db->insert('notifikasi', $params);
+		$this->db->insert('pelanggan', $params);
 		return $this->db->insert_id();
 	}
 

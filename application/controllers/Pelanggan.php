@@ -40,6 +40,7 @@ class Pelanggan extends Admin_Controller{
 		$data['pelanggan'] = $this->pelanggan_model->get_all_pelanggan($params);
 
 		$data['combo_jenis'] =  $this->pelanggan_model->get_all_jenis();
+		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);
 		$data['selected_filter'] = $filter;
 
 		$this->load->view('dashboard/header');
@@ -75,6 +76,7 @@ class Pelanggan extends Admin_Controller{
       $row[] = $pelanggan['tgl_akhir'];
       $row[] = $pelanggan['iuran_terakhir'];
       $row[] = $pelanggan['status_langganan'];
+      $row[] = $pelanggan['pelaksana'];
 
       $data[] = $row;
     }
@@ -107,26 +109,27 @@ class Pelanggan extends Admin_Controller{
 
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('domain','Domain','required');
-		$this->form_validation->set_rules('id_desa','Desa','required');
-		$this->form_validation->set_rules('nama','Nama','required');
-		$this->form_validation->set_rules('no_hp','No. HP','required|digits');
-		$this->form_validation->set_rules('jenis_langganan','Jenis Langganan','required');
+		$this->form_validation->set_rules('domain','Domain','required|valid_url');
+		$this->form_validation->set_rules('id_desa','Desa','required|integer');
+		$this->form_validation->set_rules('nama','Nama','required|alpha_numeric_spaces');
+		$this->form_validation->set_rules('no_hp','No. HP','required|numeric');
+		$this->form_validation->set_rules('email','Email','valid_email');
+		$this->form_validation->set_rules('jenis_langganan','Jenis Langganan','required|integer');
 		$this->form_validation->set_rules('tgl_iuran','Tgl Iuran','required');
-		$this->form_validation->set_rules('iuran_terakhir','Jumlah Iuran','required');
+		$this->form_validation->set_rules('iuran_terakhir','Jumlah Iuran','required|numeric');
+		$this->form_validation->set_rules('pelaksana','Pelaksana','required|alpha_numeric_spaces');
 
 		if ($this->form_validation->run())
 		{
 			$params = array(
-				'aktif' => $this->input->post('aktif'),
-				'frekuensi' => $this->input->post('frekuensi'),
-				'kode' => htmlentities($this->input->post('kode')),
-				'judul' => htmlentities($this->input->post('judul')),
-				'jenis' => $this->input->post('jenis'),
-				'server' => $this->input->post('server'),
-				'isi' => htmlentities($this->input->post('isi')),
-				'aksi_ya' => htmlentities($this->input->post('aksi_ya')),
-				'aksi_tidak' => htmlentities($this->input->post('aksi_tidak')),
+				'domain' => $this->input->post('domain'),
+				'id_desa' => $this->input->post('id_desa'),
+				'nama' => htmlentities($this->input->post('nama')),
+				'no_hp' => $this->input->post('no_hp'),
+				'jenis_langganan' => $this->input->post('jenis_langganan'),
+				'tgl_iuran' => $this->input->post('tgl_iuran'),
+				'iuran_terakhir' => htmlentities($this->input->post('iuran_terakhir')),
+				'pelaksana' => htmlentities($this->input->post('pelaksana')),
 			);
 
 			if ($id)
@@ -138,6 +141,7 @@ class Pelanggan extends Admin_Controller{
 
 		$data['status_aktif'] = $this->referensi_model->list_ref(STATUS_AKTIF);
 		$data['jenis_pelanggan'] = $this->referensi_model->list_ref(JENIS_PELANGGAN);
+		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);
 		$this->load->view('dashboard/header');
 		$this->load->view('dashboard/nav');
 		$this->load->view('pelanggan/form', $data);
