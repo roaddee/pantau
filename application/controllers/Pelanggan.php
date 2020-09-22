@@ -100,13 +100,16 @@ class Pelanggan extends Admin_Controller{
   }
 
 	/*
-	 * Adding a new pelanggan
+	 * Tambah dan ubah data pelanggan.
+	 * Untuk ubah desa perlu penanganan khusus
+	 * TODO: perbaiki ubah desa menggunakan ajax langsung
 	 */
 	function form($id = null)
 	{
 		$data['pelanggan'] = null;
+		$data['id_pelanggan'] = null;
 
-		if ($id)
+		if (empty($this->input->post('ubah_desa')) && $id)
 		{
 			$data['pelanggan'] = $this->pelanggan_model->get_pelanggan($id);
 			if (empty($data['pelanggan']))
@@ -132,7 +135,7 @@ class Pelanggan extends Admin_Controller{
 		$this->form_validation->set_rules('status_langganan','Status Langganan','numeric');
 		$this->form_validation->set_rules('pelaksana','Pelaksana','required|alpha_numeric_spaces');
 
-		if ($this->form_validation->run())
+		if (empty($this->input->post('ubah_desa')) && $this->form_validation->run())
 		{
 			$params = array(
 				'domain' => $this->input->post('domain'),
@@ -154,6 +157,12 @@ class Pelanggan extends Admin_Controller{
 			}
 			redirect('pelanggan/index');
 		}
+		if ($this->input->post('ubah_desa')) $data['id_pelanggan'] = $id;
+		$this->render_form($data);
+	}
+
+	private function render_form($data)
+	{
 		$data['status_aktif'] = $this->referensi_model->list_ref(STATUS_AKTIF);
 		$data['jenis_pelanggan'] = $this->referensi_model->list_ref(JENIS_PELANGGAN);
 		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);

@@ -6,6 +6,10 @@
 	textarea {
 		resize: vertical;
 	}
+	.select2-selection__rendered,
+	.select2-results__option {
+		font-size: 14px !important;
+	}
 </style>
 <div class="content-wrapper">
 	<section class="content-header">
@@ -21,8 +25,8 @@
 			<div class="box-header with-border">
 				<a href="<?= site_url('pelanggan')?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Kembali Ke Daftar Pelanggan</a>
 			</div>
-			<form id="validasi" action="<?= site_url("pelanggan/form/{$pelanggan['id']}"); ?>" method="POST" class="form-horizontal">
-				<input type="hidden" name='id' value="<?= $pelanggan['id']?>">
+			<form id="validasi" action="<?= site_url("pelanggan/form/".($id_pelanggan ?: $pelanggan['id'])); ?>" method="POST" class="form-horizontal">
+				<input type="hidden" id="ubah_desa" name="ubah_desa" value="">
 				<div class="box-body">
 					<div class="form-group">
 						<label for="domain" class="col-md-2 control-label"><span class="text-danger">*</span>Domain</label>
@@ -34,7 +38,7 @@
 					<div class="form-group">
 						<label for="id_desa" class="col-md-2 control-label"><span class="text-danger">*</span>Desa</label>
 						<div class="col-md-5">
-					  	<select class="form-control required input-sm select2-desa-ajax" name="id_desa" style ="width:100%;" data-url="<?= site_url('desa/list_desa_ajax')?>" onchange="formAction('validasi')">
+					  	<select class="form-control required input-sm select2-desa-ajax" name="id_desa" style ="width:100%;" data-url="<?= site_url('desa/list_desa_ajax')?>" onchange="$('#ubah_desa').val('1'); formAction('validasi')">
 								<?php if ($desa): ?>
 									<option value="<?= $desa['id']?>" selected><?= $desa['nama_desa'].' - '.$desa['nama_kabupaten']?></option>
 								<?php endif;?>
